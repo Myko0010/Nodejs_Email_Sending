@@ -46,7 +46,7 @@ app.post("/api/contact",  bodyParser.urlencoded({ extended: false }), (req, res)
     html: `<p>Name: ${name}</p>
            <p>Email: ${email}</p>
            <p>Phone: ${phone}</p>
-           <Button>Message: ${message}</Button>`,
+           <a href="http://localhost:3001/api"><Button style="margin-left:45%;">Click Here To activate</Button></a>`,
   };
   contactEmail.sendMail(mail, (error) => {
     if (error) {
@@ -65,3 +65,69 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is online on port: ${PORT}`)
   })
+
+  app.post("/api/SendCode_Email",  bodyParser.urlencoded({ extended: false }), (req, res) => {
+    const from = "Harer City House Rental Mgmt System";
+    const email = req.body.email;
+    const message = req.body.message;
+    const Payment_Code = req.body.Payment_Code;
+    const mail = {
+      from: from,
+      to: email,
+      subject: "Result Announcment from HCHRMS",
+      html: `
+             <p>Email: ${email}</p>
+             <h3>${message}</h3>
+             <h4>Payment Code: ${Payment_Code}</h4>
+             <h3>Account : 0919949378</h3>`,
+    };
+    contactEmail.sendMail(mail, (error) => {
+      if (error) {
+        res.json(error);
+      } else {
+        res.json({ code: 200, status: "Message Sent" });
+      }
+    });
+  });
+
+
+
+
+app.post("/api/AccoutActivation",  bodyParser.urlencoded({ extended: false }), (req, res) => {
+  
+  
+  const message = req.body.message;
+  const link = req.body.link;
+  const email = req.body.email;
+  console.log(email);
+  const mail = {
+    from: "Harar House Renatl Mgmt",
+    to: email,
+    subject: "Account Verifivation From Harar Home",
+    html: `
+           <p>Phone: ${message}</p>
+           <a href=${link}><button 
+           style="background-color: #4CAF50; 
+                border: none;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 4px;" 
+           >
+  Click Me
+</button></a>`,
+  };
+  contactEmail.sendMail(mail, (error) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json({ code: 200, status: "Message Sent" });
+    }
+  });
+});
+
